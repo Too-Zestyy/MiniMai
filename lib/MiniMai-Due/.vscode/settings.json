@@ -1,0 +1,12 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "system_error": "cpp",
+        "type_traits": "cpp",
+        "xtr1common": "cpp",
+        "xstring": "cpp",
+        "*.pgm": "cpp",
+        "*.arr": "cpp",
+        "cstddef": "c"
+    }
+}
