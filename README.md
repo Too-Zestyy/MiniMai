@@ -105,7 +105,7 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Prerequisites
 
-This library assumes that you have a copy of MaiMai running on your PC correctly. For reference, this project has been developed using a copy of [SDEY_1.99 unencrypted dump](https://mega.nz/folder/9F5RBYLY#9Pv2i1Xip63KztO-mH8mKg)
+This library assumes that you have a copy of MaiMai running on your PC correctly. For reference, this project has been developed using a copy of the [SDEY_1.99 unencrypted dump](https://mega.nz/folder/9F5RBYLY#9Pv2i1Xip63KztO-mH8mKg).
 
 It also assumes that you are able to build a controller for the game. I will make a guide including parts and case designs once I've made them, but for now that's not ready.
 
@@ -152,8 +152,9 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
+- [x] Show zones onscreen for easier usage
+- [x] Detect which zone is pressed onscreen
+    - [ ] Output to [serial as the cab would expect][1].
 - [ ] Feature 3
     - [ ] Nested Feature
 
@@ -204,7 +205,7 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* Bottersnike for their amazing work reverse engineering the MaiMai binaries, which let me make the arduino directly communicate as the cab expects from an actual screen (buttons are yet to be worked on without `DEV 1` as they work through JAMMA). Their documentation on the communication protocol of the screen can be found [here](https://bsnk.me/eamuse/sega/software/touch.html).
+* Bottersnike for their amazing work reverse engineering the MaiMai binaries, which let me make the arduino directly communicate as the cab expects from an actual screen (buttons are yet to be worked on without `DEV 1` as they work through JAMMA). Their documentation on the communication protocol of the screen can be found [here][].
 
 * []()
 * []()
@@ -216,6 +217,7 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[1]: https://bsnk.me/eamuse/sega/software/touch.html "Screen communication protocol documentation by Bottersnike"
 [contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
 [contributors-url]: https://github.com/SSteers126/MiniMai/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
