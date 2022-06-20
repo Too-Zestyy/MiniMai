@@ -33,10 +33,10 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">MiniMai</h3>
 
   <p align="center">
-    project_description
+    A project simplifying making 3rd party controllers for MaiMai with Arduinos
     <br />
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
     <br />
@@ -92,14 +92,7 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Built With
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [Bounce2](https://www.arduino.cc/reference/en/libraries/bounce2/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -108,12 +101,18 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+*This guide will be filled once development on the example setup I have is complete.*
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+This library assumes that you have a copy of MaiMai running on your PC correctly. For reference, this project has been developed using a copy of [SDEY_1.99 unencrypted dump](https://mega.nz/folder/9F5RBYLY#9Pv2i1Xip63KztO-mH8mKg)
+
+It also assumes that you are able to build a controller for the game. I will make a guide including parts and case designs once I've made them, but for now that's not ready.
+
+In addition, the arduino controlling the state of the screen is required to ron on serial port `COM 3`. To do this on Windows 10, go to Device manager -> Ports (COM & LPT) -> Your arduino device -> Properties -> Port settings -> Advanced... -> COM Port Number.
+
+You then have to restart your computer to ensure no other devices attempt to use it at the same time. Windows will tell you if another device is using COM 3 when you select it for the Arduino. *You have to accept the warning that the other device may act unpredictably*, as otherwise it will not change the port at all, even after restarting to the best of my knowledge.
+
 * npm
   ```sh
   npm install npm@latest -g
@@ -204,6 +203,8 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+
+* Bottersnike for their amazing work reverse engineering the MaiMai binaries, which let me make the arduino directly communicate as the cab expects from an actual screen (buttons are yet to be worked on without `DEV 1` as they work through JAMMA). Their documentation on the communication protocol of the screen can be found [here](https://bsnk.me/eamuse/sega/software/touch.html).
 
 * []()
 * []()
