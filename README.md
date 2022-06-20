@@ -155,6 +155,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 - [x] Show zones onscreen for easier usage
 - [x] Detect which zone is pressed onscreen
     - [ ] Output to [serial as the cab would expect][1].
+- [ ] Make zone drawing and sensing dynamic, so only a resolution needs to be input and the library can automatically rescale
 
 See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
 
