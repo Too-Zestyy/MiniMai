@@ -1,6 +1,10 @@
 #include <lcd.h>
 
 #include <MiniMai-Due.h>
+
+// Ensuring zone character codes are consistent across lib
+#include <charset.cpp>
+
 // #include "zonesraw.pgm"
 
 //Basic Colors as given by TFT
@@ -23,6 +27,9 @@
 #define BUTTON_L_GREY  0x738E
 // simplify checking for bounds
 #define BETWEEN(value, min, max) (value < max && value > min)
+// const byte ZoneA1 = 0x2;
+
+
 
 // int centreZone[8][2] = {{120, 91}, {140, 100}, {149, 120}, {140, 140}, {120, 149}, {100, 140}, {91, 120}, {100, 100}};
 // int aZones[8][4][2] = {
@@ -171,47 +178,6 @@ void MaiMenu::drawQuads(int zones[][4][2], int numQuads, int colour) {
     // this -> drawQuad(zones[0], WHITE);
 }
 
-// bool MaiMenu::inPoly(int x, int y, int polyPoints[][2], int pointNum) {
-//     // int index = 0;
-//     bool inside = false;
-//     // int j = pointNum-1;
-
-//     // for (int i = 0; i < pointNum; i++) {
-//     //     if ((x == polyPoints[i][0]) && (y == polyPoints[i][1])) {return true;} // corner
-
-//     //     if (((polyPoints[i][1] > y) != (polyPoints[j][1] > y))) {
-//     //         int slope = (x-polyPoints[i][0])*(polyPoints[j][1]-polyPoints[i][1])-(polyPoints[j][0]-polyPoints[i][0])*(y-polyPoints[i][1]);
-            
-//     //         if (slope == 0) {return true;} // on edge
-//     //         if ((slope < 0) != (polyPoints[j][1] < polyPoints[i][1])) {inside = !inside;}
-//     //     }
-
-//     // }
-
-
-//     int seqCoords[pointNum+1][2];
-
-//     memcpy(polyPoints[pointNum-1], seqCoords[0], sizeof(polyPoints[pointNum-1]));
-//     // seqCoords[0] = polyPoints[pointNum-1];
-//     for (int point = 1; point < pointNum+1; pointNum++) {
-//         // seqCoords[point] = polyPoints[point-1];
-//         memcpy(polyPoints[point-1], seqCoords[point], sizeof(polyPoints[point-1]));
-//     }
-
-//     for (int point = 0; point < pointNum; point++) {
-//         if ((seqCoords[point][0] == x && seqCoords[point][1] == y)) {return true;}
-
-//         // if ((seqCoords[point][0]))
-
-//         if (!((seqCoords[point][1] > y && seqCoords[point+1][1] > y) || (seqCoords[point][1] < y && seqCoords[point+1][1] < y))) {
-//             int sx = polyPoints[point][0] + ((polyPoints[point+1][0]-polyPoints[point][0])*((y-polyPoints[point][1])/(polyPoints[point+1][1]-polyPoints[point][1])));
-//             if (x > sx) {inside = !inside;}
-//         }
-//     return inside;
-
-// }
-// }
-
 coordBounds MaiMenu::getBounds(int polyPoints[][2]) {
     int minX = 32767; int minY = 32767;
     int maxX = 0; int maxY = 0;
@@ -222,7 +188,7 @@ coordBounds MaiMenu::getBounds(int polyPoints[][2]) {
     return returnBounds(minX, minY, maxX, maxY);
 }
 
-byte MaiMenu::getCoordVal(int x, int y) {
+char MaiMenu::getCoordVal(int x, int y) {
     return this -> zoneMap[y][x];
 }
 
@@ -237,38 +203,6 @@ bool MaiMenu::inPoly(int x, int y, int polyPoints[][2], int pointNum) {
     }
 
     return inside;
-
-    // int j = pointNum-1;
-
-    // for (int i = 0; i < pointNum; i++) {
-    //     if ((x == polyPoints[i][0]) && (y == polyPoints[i][1])) {return true;} // corner
-
-    //     if (((polyPoints[i][1] > y) != (polyPoints[j][1] > y))) {
-    //         int slope = (x-polyPoints[i][0])*(polyPoints[j][1]-polyPoints[i][1])-(polyPoints[j][0]-polyPoints[i][0])*(y-polyPoints[i][1]);
-            
-    //         if (slope == 0) {return true;} // on edge
-    //         if ((slope < 0) != (polyPoints[j][1] < polyPoints[i][1])) {inside = !inside;}
-    //     }
-
-    // }
-
-
-    // int seqCoords[pointNum+1][2];
-
-    // memcpy(polyPoints[pointNum-1], seqCoords[0], sizeof(polyPoints[pointNum-1]));
-    // // seqCoords[0] = polyPoints[pointNum-1];
-    // for (int point = 1; point < pointNum+1; pointNum++) {
-    //     // seqCoords[point] = polyPoints[point-1];
-    //     memcpy(polyPoints[point-1], seqCoords[point], sizeof(polyPoints[point-1]));
-    // }
-
-//     int i, j, c = 0;
-//     for (i = 0, j = pointNum-1; i < pointNum; j = i++) {
-//         if ( ((polyPoints[i][1]>y) != (polyPoints[j][1]>y)) &&
-//         (x < (polyPoints[j][0]-polyPoints[i][0]) * (y-polyPoints[i][1]) / (polyPoints[j][1]-polyPoints[i][1]) + polyPoints[i][0]) )
-//         c = !c;
-//     }
-//   return c;
 
 }
 
@@ -296,6 +230,160 @@ int MaiMenu::getZoneTouch(int xTouch, int yTouch) {
     return -1;
 }
 
+buttonState MaiMenu::getZonesTouched(int touches[][2]) {
+
+    buttonState state = buttonState();
+    // for (int i = 0; i < 20; i++) {
+    //     state.states[i] = true;
+    // }
+
+    for (int i = 0; i < 20; i++) {
+        state.states[i] = false;
+    }
+
+    // if (this->getCoordVal(coords[0][0], coords[0][1]) == '\x23') {
+    //         state.states[0] = true;
+    // }
+    // state.states = {
+    // // A1, B1, A2, B2, x
+    // false, false, false, false, false,
+    // // A3, B3, A4, B4, x
+    // false, false, false, false, false,
+    // // A5, B5, A6, B6, x
+    // false, false, false, false, false,
+    // // A7, B7, A8, B8, C
+    // false, false, false, false, false};
+    // SerialUSB.println(touches[0][0]);
+
+    for (int touch = 0; touch < sizeof(this->touches)/sizeof(this->touches[0]); touch++) {
+        if (this->touches[touch][0] != -1) {
+            // if (this->getCoordVal(this->touches[touch][0], this->touches[touch][1]) == '\x23') {
+            //     state.states[0] = true;
+            // }
+        
+            switch(this->getCoordVal(this->touches[touch][0], this->touches[touch][1])) {
+                // indexing on zones follows as Centre, A, B
+                case CENTRE_ZONE:
+                    state.states[19] = true;
+                    break;
+                case ZONE_A1:
+                    state.states[0] = true;
+                    break;
+                case ZONE_A2:
+                    state.states[2] = true;
+                    break;
+                case ZONE_A3:
+                    state.states[5] = true;
+                    break;
+                case ZONE_A4:
+                    state.states[7] = true;
+                    break;
+                case ZONE_A5:
+                    state.states[10] = true;
+                    break;
+                case ZONE_A6:
+                    state.states[12] = true;
+                    break;
+                case ZONE_A7:
+                    state.states[15] = true;
+                    break;
+                case ZONE_A8:
+                    state.states[17] = true;
+                    break;
+                case ZONE_B1:
+                    state.states[1] = true;
+                    break;
+                case ZONE_B2:
+                    state.states[3] = true;
+                    break;
+                case ZONE_B3:
+                    state.states[6] = true;
+                    break;
+                case ZONE_B4:
+                    state.states[8] = true;
+                    break;
+                case ZONE_B5:
+                    state.states[11] = true;
+                    break;
+                case ZONE_B6:
+                    state.states[13] = true;
+                    break;
+                case ZONE_B7:
+                    state.states[16] = true;
+                    break;
+                case ZONE_B8:
+                    state.states[18] = true;
+                    break;
+                }
+            memcpy(this->touches[touch], this->emptyTouch, this->touchSize);
+            }
+            
+        }
+    // this -> touches = {{-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}, {-1, -1},
+    //                    {-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}};
+    return state;
+    
+}
+
+bool MaiMenu::getTouchChar(int coords[][2]) {
+
+    buttonState state = buttonState();
+    // for (int i = 0; i < 20; i++) {
+    //     state.states[i] = true;
+    // }
+
+    for (int i = 0; i < 20; i++) {
+        state.states[i] = false;
+    }
+
+    
+    // state.states = {
+    // // A1, B1, A2, B2, x
+    // false, false, false, false, false,
+    // // A3, B3, A4, B4, x
+    // false, false, false, false, false,
+    // // A5, B5, A6, B6, x
+    // false, false, false, false, false,
+    // // A7, B7, A8, B8, C
+    // false, false, false, false, false};
+
+    for (int touch = 0; touch < sizeof(coords)/sizeof(coords[0]); touch++) {
+        if (this->getCoordVal(coords[touch][0], coords[touch][1]) == '\x23') {
+            state.states[0] = true;
+        }
+        state.states[0] = true;
+    }
+
+    return (this->getCoordVal(coords[0][0], coords[0][1]) == '\x23');
+}
+
+stateMessage genMessage(buttonState state) {
+    stateMessage message = stateMessage();
+    // NOTE: remember struct initialises with brackets and '@'s
+    // data[0] = '(';
+    for (byte i = 0; i < 4; i++) {
+        char val = '@';
+        for (byte j = 0; j < 5; j++) {
+            if (state.states[i * 5 + j]) val |= 1 << j;
+                message.message[i + 1] = val;}
+    }
+    return message;
+// data[5] = '@';
+// data[6] = '@';
+// memcpy(data + 7, "@@@@@", 4);
+// data[11] = '@';
+// data[12] = '@';
+// data[13] = ')';
+
+}
+
+stateMessage MaiMenu::getMessage(int coords[][2]) {
+    return genMessage(this->getZonesTouched(coords));    
+}
+
+
+
+
 void MaiMenu::DrawMaiZones(void) {
     this -> menu = MAIN_MENU;
     this -> fill(GREY);
@@ -312,105 +400,3 @@ void MaiMenu::DrawMaiZones(void) {
 // int centreZone[8][2] = {{120, 91}, {140, 100}, {149, 120}, {140, 140}, {120, 149}, {100, 140}, {91, 120}, {100, 100}};
 
 MaiMenu Menu = MaiMenu();
-
-// int MaiMenu::subtract(int a, int b) {
-//     return a+b;
-// }
-
-// int MaiMenu::add(int a, int b) {
-//     return a+b;
-// }
-
-// int MaiMenu::buttonCheck(int touchX, int touchY) {
-//     for (int i = 0; i < 8; i++) {
-//         if (this -> buttons[i].isPressed(touchX, touchY)) {
-//             // Serial.print("Button pressed: ");
-//             // Serial.println(i);
-//             return i;
-//             break;
-//         }
-//         else {
-//             continue;
-//         }
-
-//     return -1;
-//         // Serial.println(buttons[i].x2 - buttons[i].x1);
-//     }
-// }
-
-// void MaiMenu::newFunc(void) {
-//     continue;
-// }
-
-// void MaiMenu::BuildMainMenu(void) {
-//     // this -> buttons = new MaiButton buttons[9];
-//     this -> menu = MAIN_MENU;
-//     this -> cur_Tft.lcd_clear_screen(GREY);
-
-//     for (int point; point <= 8; point++) {
-//         if (point == 8) {
-//             this -> cur_Tft.lcd_draw_line(centreZone[0][0], centreZone[0][1], centreZone[8][0], centreZone[8][1], WHITE);
-//         }
-//         // Write code to draw line for each pair of coords (coord 0-1, coords 1-2 etc, maybe coords last-first to complete shape)
-//         else {
-//             this -> cur_Tft.lcd_draw_line(centreZone[point][0], centreZone[point][1], centreZone[point+1][0], centreZone[point+1][1], WHITE);
-//         };
-//     };
-
-// }
-
-// Arrays to store coords for button starting positions keypad
-// int mainxcoords[3] = {15, 88, 161};
-// int mainycoords[3] = {260, 209, 158};
-// int mainxcoords[8] = {45, 131, 20, 156, 20, 156, 45, 131};
-
-// zones keeps an array for each zone, each being a point of the zone.
-// zones[0] is centre, zones[1-8] is A zones, and zones[9-16] is B zones
-
-// int zones[17][][2] = {
-//     {{120, 91}, {140, 100}, {149, 120}, {140, 140}, {120, 149}, {100, 140}, {91, 120}, {100, 100}},
-
-//     {{171, 171}, {239, 240}, {120, 239}, {120, 192}},
-//     {{192, 120}, {239, 120}, {239, 239}, {171, 171}},
-//     {{240, 0}, {239, 120}, {192, 120}, {171, 70}},
-//     {{120, 0}, {239, 0}, {171, 70}, {120, 48}},
-//     {{0, 0}, {120, 0}, {120, 48}, {70, 70}},
-//     {{48, 120}, {0, 120}, {0, 0}, {70, 70}},
-//     {{70, 171}, {0, 239}, {0, 120}, {48, 120}},
-//     {{120, 192}, {120, 239}, {0, 239}, {70, 171}},
-
-//     {{140, 140}, {171, 171}, {120, 192}, {120, 149}},
-//     {{149, 120}, {192, 120}, {171, 171}, {140, 140}},
-//     {{171, 70}, {192, 120}, {149, 120}, {140, 100}},
-//     {{120, 48}, {171, 70}, {140, 100}, {120, 91}},
-//     {{70, 70}, {120, 48}, {120, 91}, {100, 100}},
-//     {{48, 120}, {91, 120}, {100, 100}, {70, 70}},
-//     {{100, 140}, {91, 120}, {48, 120}, {70, 171}}, 
-//     {{120, 149}, {120, 192}, {70, 171}, {100, 140}}
-// }
-
-// for (int zone; zone < 17; zone++) {
-//     for (int point; point <= sizeof(zones[zone]); point++) {
-//         if (point == sizeof(zones[zone])) {
-//             Tft.lcd_draw_line(zones[zone][0][0], zones[zone][0][1], zones[zone][sizeof(zones[zone])][0], zones[zone][sizeof(zones[zone])][1], WHITE);
-//         }
-//         // Write code to draw line for each pair of coords (coord 0-1, coords 1-2 etc, maybe coords last-first to complete shape)
-//         else {
-//             Tft.lcd_draw_line(zones[zone][point][0], zones[zone][point][1], zones[zone][point+1][0], zones[zone][point+1][1], WHITE);
-//         }
-        
-//     }
-// }
-
-// }
-
-// MaiButton MaiMenu::BuildButton(int x, int y, int width, int height) {
-//     // this -> cur_Tft.lcd_fill_rect(x, y, width, height, BUTTON_D_GREY);
-//     // Button border
-//     return MaiButton(x, y, width, height, this -> cur_Tft);
-    
-// }
-
-// MaiButton MaiMenu::BuildButton(int x, int y) {
-//     return MaiMenu::BuildButton(x, y, 64, 40);
-// }

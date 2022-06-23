@@ -10,6 +10,9 @@
 #define GREY  		   0x8430
 #define RED          0xF800
 
+
+static int CurTouches[10][2] = {{-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}, {-1, -1},
+                           {-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}, {-1, -1}};
 int state = 0;
 int lastState = -1;
 bool inputting = false;
@@ -68,8 +71,22 @@ void setup()
     
     // Tft.lcd_display_string(45, 50, (const uint8_t *)Menu.zoneMap[121][100], FONT_1608, WHITE);
     SerialUSB.begin(9600);
+    // int test[2] = {-1, -1};
+    // SerialUSB.println(sizeof(test));
+    // for (int t = 0; t < 1; t++) {
+    //   SerialUSB.println("test");
+    // }
     // Serial.print('b');
     // Keyboard.begin();  
+    // if (Menu.zoneMap[150][150] != '#') {
+    //   SerialUSB.println(Menu.zoneMap[150][150]);
+    // }
+    // else {
+    //   SerialUSB.println("equal");
+    // }
+    // int coords[][2] = {{Tp.s_tTouch.hwXpos, Tp.s_tTouch.hwYpos}};
+    // SerialUSB.println(sizeof(coords)/sizeof(coords[0]));
+    
 }
 
 
@@ -79,9 +96,23 @@ void loop()
   //   Tft.lcd_clear_screen(RED);
   //   SerialUSB.print('b');
   // }
+
+  // s = new stateMessage;
+  // SerialUSB.println(s.state[0]);
+  // SerialUSB.println(s.state[19]);
+
   Tp.tp_scan(0);
   if (Tp.s_tTouch.hwXpos != 65535) {
-    SerialUSB.println(int(Menu.getCoordVal(Tp.s_tTouch.hwXpos, Tp.s_tTouch.hwYpos)));
+    Menu.touches[0][0] = Tp.s_tTouch.hwXpos; Menu.touches[0][1] = Tp.s_tTouch.hwYpos;
+    // newtouches.touches = touch;
+    // Menu.touchCoords = newtouches;
+    // int coords[1][2] = {{Tp.s_tTouch.hwXpos, Tp.s_tTouch.hwYpos}};
+
+    // SerialUSB.println(Menu.getMessage(coords).message);
+    // SerialUSB.println(Menu.getZonesTouched(CurTouches).states[19]);
+    // SerialUSB.println(Menu.getTouchChar(coords));
+    //sizeof(coords)/sizeof(coords[0])
+    // SerialUSB.println(Menu.getCoordVal(Tp.s_tTouch.hwXpos, Tp.s_tTouch.hwYpos));
     // SerialUSB.print(Tp.s_tTouch.hwXpos);
     // SerialUSB.print(',');
     // SerialUSB.println(Tp.s_tTouch.hwYpos);

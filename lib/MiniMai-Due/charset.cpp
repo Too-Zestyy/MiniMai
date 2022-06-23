@@ -1,0 +1,21 @@
+#define EMPTY_ZONE     '\x21'
+
+#define CENTRE_ZONE    '\x43'
+
+#define ZONE_A1        '\x30'
+#define ZONE_A2        '\x31'
+#define ZONE_A3        '\x32'
+#define ZONE_A4        '\x33'
+#define ZONE_A5        '\x34'
+#define ZONE_A6        '\x35'
+#define ZONE_A7        '\x36'
+#define ZONE_A8        '\x37'
+
+#define ZONE_B1        '\x61'
+#define ZONE_B2        '\x62'
+#define ZONE_B3        '\x63'
+#define ZONE_B4        '\x64'
+#define ZONE_B5        '\x65'
+#define ZONE_B6        '\x66'
+#define ZONE_B7        '\x67'
+#define ZONE_B8        '\x68'
